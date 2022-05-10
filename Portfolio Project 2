@@ -1,0 +1,45 @@
+SELECT * 
+FROM `portfolioproject-348217.covid19.covid_deaths` dea
+JOIN `portfolioproject-348217.covid19.covid_vaccinations` vac
+    ON dea.location = vac.location
+    AND dea.date = vac.date
+
+-- Total Population vs Vaccinations
+
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, 
+    SUM(vac.new_vaccinations) OVER (PARTITION BY dea.location ORDER BY dea.location, dea.date) AS RollingVaccinated
+FROM `portfolioproject-348217.covid19.covid_deaths` dea
+JOIN `portfolioproject-348217.covid19.covid_vaccinations` vac
+    ON dea.location = vac.location
+    AND dea.date = vac.date
+WHERE dea.continent IS NOT NULL
+ORDER BY 2,3
+
+-- Common Table Expression
+
+WITH PopvsVac
+AS
+(
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, 
+    SUM(vac.new_vaccinations) OVER (PARTITION BY dea.location ORDER BY dea.location, dea.date) AS RollingVaccinated
+FROM `portfolioproject-348217.covid19.covid_deaths` dea
+JOIN `portfolioproject-348217.covid19.covid_vaccinations` vac
+    ON dea.location = vac.location
+    AND dea.date = vac.date
+WHERE dea.continent IS NOT NULL
+)
+SELECT *, (RollingVaccinated/Population)*100 AS PercentageRollingVaccinated
+FROM PopvsVac
+
+-- Create View for Visualization
+
+CREATE VIEW covid19.myview AS
+SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations, 
+    SUM(vac.new_vaccinations) OVER (PARTITION BY dea.location ORDER BY dea.location, dea.date) AS RollingVaccinated
+FROM `portfolioproject-348217.covid19.covid_deaths` dea
+JOIN `portfolioproject-348217.covid19.covid_vaccinations` vac
+    ON dea.location = vac.location
+    AND dea.date = vac.date
+WHERE dea.continent IS NOT NULL
+
+
