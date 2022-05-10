@@ -1,0 +1,82 @@
+-- BigQuery was used to review and explore data
+
+SELECT *
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+WHERE continent is not null
+ORDER BY 3,4
+
+-- SELECT *
+-- FROM `portfolioproject-348217.covid19.covid_vaccinations` 
+-- ORDER BY 3,4
+
+SELECT Location, date, total_cases, new_cases,total_deaths, population
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+ORDER BY 1,2
+
+-- Looking at Total Cases vs Total Deaths in Canada
+
+SELECT Location, date, total_cases,total_deaths,(Total_deaths/total_cases)*100 AS DeathPercentage
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+WHERE Location like '%Canada%'
+ORDER BY 1,2
+
+-- Total Cases vs Population in Canada
+
+SELECT Location, date, total_cases, Population,(Total_cases/population)*100 AS CasesPercentage
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+WHERE Location like '%Canada%'
+ORDER BY 1,2
+
+-- Countries with Highest Infection Rate vs the Population
+
+SELECT Location,Population, MAX(total_cases) AS HighestInfectionCount,MAX((Total_cases/population))*100 AS PercentPopulationInfected
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+GROUP BY Location, Population
+ORDER BY PercentPopulationInfected DESC
+
+SELECT Location, Population, Date, MAX(total_cases) AS HighestInfectionCount,MAX((Total_cases/population))*100 AS PercentPopulationInfected
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+GROUP BY Location, Population, Date
+ORDER BY PercentPopulationInfected DESC
+
+-- Countries with Highest Death Count per Population
+
+SELECT Location,Population, MAX(total_deaths) AS TotalDeathCount
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+WHERE continent IS NOT NULL
+GROUP BY Location, Population
+ORDER BY TotalDeathCount DESC
+
+-- Total Deaths by Continent
+
+SELECT location, MAX(total_deaths) AS TotalDeathCount
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+WHERE continent IS NULL
+GROUP BY location
+ORDER BY TotalDeathCount DESC
+
+-- Continents with the Highest Death Count Per Population
+
+SELECT location, MAX(total_deaths) AS TotalDeathCount
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+WHERE continent IS NULL
+AND location NOT IN ('World', 'European Union', 'International', 'Low income', 'Upper middle income', 'High income', 'Lower middle income')
+GROUP BY location
+ORDER BY TotalDeathCount DESC
+
+SELECT location, SUM(new_deaths) AS TotalDeathCount
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+WHERE continent IS NULL
+AND location NOT IN ('World', 'European Union', 'International', 'Low income', 'Upper middle income', 'High income', 'Lower middle income')
+GROUP BY location
+ORDER BY TotalDeathCount DESC
+
+-- GLOBAL NUMBERS
+
+SELECT SUM(new_cases) AS total_cases, SUM(new_deaths) AS total_deaths, SUM(new_deaths)/SUM(new_cases)*100 AS DeathPercentage
+FROM `portfolioproject-348217.covid19.covid_deaths` 
+-- WHERE Location like '%Canada%'
+WHERE continent IS NOT NULL
+--GROUP BY date
+ORDER BY 1,2
+
