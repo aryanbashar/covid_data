@@ -10,6 +10,8 @@ The following data files were reviewed and cleaned in Excel prior to usage in SQ
 [Tableau Table 3.csv](https://github.com/aryanbashar/covid_deaths/files/8656204/Tableau.Table.3.csv),
 [Tableau Table 4.csv](https://github.com/aryanbashar/covid_deaths/files/8656205/Tableau.Table.4.csv).
 
+Tableau Dashboard can be viewed at: https://public.tableau.com/app/profile/aryan.bashar/viz/TableauDashboardProject_16509146172650/Dashboard1
+
 References:
 Hannah Ritchie, Edouard Mathieu, Lucas Rodés-Guirao, Cameron Appel, Charlie Giattino, Esteban Ortiz-Ospina, Joe Hasell, Bobbie Macdonald, Diana Beltekian and Max Roser 
 (2020) - "Coronavirus Pandemic (COVID-19)". Published online at OurWorldInData.org. Retrieved from: 'https://ourworldindata.org/coronavirus' [Online Resource]
